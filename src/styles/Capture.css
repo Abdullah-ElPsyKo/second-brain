@@ -1,0 +1,19 @@
+.capture-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 700px;
+}
+
+.capture-form textarea {
+  min-height: 160px;
+  padding: 16px;
+  border-radius: 8px;
+  resize: vertical;
+}
+
+.capture-form button {
+  align-self: flex-end;
+  padding: 10px 24px;
+  cursor: pointer;
+}
