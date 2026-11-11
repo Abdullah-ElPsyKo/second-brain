@@ -1,4 +1,5 @@
 import { CaptureForm } from "../components/CaptureForm";
+import { RecentCaptures } from "../components/RecentCaptures";
 import "../styles/Capture.css";
 
 export function CapturePage() {
@@ -18,7 +19,7 @@ export function CapturePage() {
         <h2 className="recent-captures-title">
           Recent Captures
         </h2>
-        {/* RecentCaptures component goes here */}
+        <RecentCaptures />
       </section>
 
     </div>

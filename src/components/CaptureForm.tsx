@@ -3,8 +3,21 @@ import { useState } from "react";
 export function CaptureForm() {
   const [content, setContent] = useState("");
 
-  function handleCapture() {
-    console.log(content);
+  async function handleCapture() {
+    const response = await fetch("http://localhost:3000/api/captures", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ content })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Error capturing content:", errorData.error);
+      return;
+    }
+
     setContent("");
   }
 
