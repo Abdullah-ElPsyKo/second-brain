@@ -13,6 +13,14 @@ export async function getRecentCaptures() {
         orderBy: {
             createdAt: "desc"
         },
-        take: 10
+        take: 5
+    });
+}
+
+export async function getAllCaptures() {
+    return prisma.capture.findMany({
+        orderBy: {
+            createdAt: "desc"
+        }
     });
 }
