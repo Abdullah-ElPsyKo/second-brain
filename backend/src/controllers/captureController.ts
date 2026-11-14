@@ -1,12 +1,16 @@
 import type { Request, Response } from "express";
+import { CaptureType } from "@prisma/client";
 import {
   createCapture,
   getAllCaptures,
   getRecentCaptures,
 } from "../services/captureService.js";
 
+const VALID_TYPES = Object.values(CaptureType);
+
 export async function createCaptureController(req: Request, res: Response) {
   const { content } = req.body;
+  const rawType = typeof req.body.type === "string" ? req.body.type.toUpperCase() : undefined;
 
   if (typeof content !== "string" || !content.trim()) {
     res.status(400).json({
@@ -15,8 +19,15 @@ export async function createCaptureController(req: Request, res: Response) {
     return;
   }
 
+  if (!rawType || !(VALID_TYPES as readonly string[]).includes(rawType)) {
+    res.status(400).json({
+      error: "Invalid capture type",
+    });
+    return;
+  }
+
   try {
-    const capture = await createCapture(content.trim());
+    const capture = await createCapture(content.trim(), rawType as CaptureType);
     res.status(201).json(capture);
   } catch (error) {
     res.status(500).json({

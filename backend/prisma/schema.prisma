@@ -9,8 +9,27 @@ datasource db {
 
 // Add application models here.
 
+
+enum CaptureType {
+  NOTE
+  IDEA
+  LINK
+  TASK
+}
+
+enum CaptureStatus {
+  INBOX
+  ACTIVE
+  ARCHIVED
+}
+
 model Capture {
-  id        Int      @id @default(autoincrement())
+  id        String        @id @default(uuid())
+  title     String?
   content   String
-  createdAt DateTime @default(now())
+  type      CaptureType   @default(NOTE)
+  status    CaptureStatus @default(INBOX)
+
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
 }

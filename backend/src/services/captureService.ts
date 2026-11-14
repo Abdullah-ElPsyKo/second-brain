@@ -1,9 +1,11 @@
+import type { CaptureType } from "@prisma/client";
 import { prisma } from "../db/client.js";
 
-export async function createCapture(content: string) {
+export async function createCapture(content: string, type: CaptureType) {
   return prisma.capture.create({
     data: {
-      content: content
+      content: content,
+      type: type
     }
   });
 }
