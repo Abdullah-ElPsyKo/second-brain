@@ -1,7 +1,17 @@
 import { useState } from "react";
 
+type CaptureType = "note" | "task" | "idea" | "link";
+
+const captureTypes: { value: CaptureType; label: string }[] = [
+  { value: "note", label: "Note" },
+  { value: "task", label: "Task" },
+  { value: "idea", label: "Idea" },
+  { value: "link", label: "Link" }
+];
+
 export function CaptureForm() {
   const [content, setContent] = useState("");
+  const [type, setType] = useState<CaptureType>("note");
 
   async function handleCapture() {
     const response = await fetch("http://localhost:3000/api/captures", {
@@ -9,7 +19,7 @@ export function CaptureForm() {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ content })
+      body: JSON.stringify({ content, type })
     });
 
     if (!response.ok) {
@@ -23,6 +33,19 @@ export function CaptureForm() {
 
   return (
     <div className="capture-form">
+      <div className="capture-type-selector">
+        {captureTypes.map(({ value, label }) => (
+          <button
+            key={value}
+            type="button"
+            className={type === value ? "active" : ""}
+            onClick={() => setType(value)}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
       <textarea
         placeholder="What's on your mind?"
         value={content}
