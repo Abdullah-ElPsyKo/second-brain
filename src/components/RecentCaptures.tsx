@@ -1,62 +1,94 @@
-
 import { useEffect, useState } from "react";
 import type { Capture } from "../types/capture";
+import { formatRelativeTime, removeCapture } from "../services/captureService";
 
 export function RecentCaptures() {
-    const [captures, setCaptures] = useState<Capture[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+  const [captures, setCaptures] = useState<Capture[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [removingId, setRemovingId] = useState<string | null>(null);
 
-    useEffect(() => {
-        const controller = new AbortController();
+  useEffect(() => {
+    const controller = new AbortController();
 
-        async function loadRecentCaptures() {
-            try {
-                const response = await fetch(
-                    "http://localhost:3000/api/captures/recent",
-                    { signal: controller.signal }
-                );
+    async function loadRecentCaptures() {
+      try {
+        const response = await fetch(
+          "http://localhost:3000/api/captures/recent",
+          { signal: controller.signal }
+        );
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        setCaptures(await response.json());
+      } catch (err) {
+        if (controller.signal.aborted) return;
+        setError(err instanceof Error ? err.message : "Failed to fetch captures");
+      } finally {
+        if (!controller.signal.aborted) setLoading(false);
+      }
+    }
 
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
+    loadRecentCaptures();
+    return () => controller.abort();
+  }, []);
 
-                const data: Capture[] = await response.json();
-                setCaptures(data);
+  async function handleRemove(id: string) {
+    setError(null);
+    setRemovingId(id);
+    try {
+      await removeCapture(id);
+      setCaptures((current) => current.filter((capture) => capture.id !== id));
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? `Could not remove capture: ${err.message}`
+          : "Could not remove capture"
+      );
+    } finally {
+      setRemovingId(null);
+    }
+  }
 
-            } catch (err) {
-                if (controller.signal.aborted) return;
+  if (loading) return <p>Loading recent captures...</p>;
+  if (error && captures.length === 0) return <p>Error: {error}</p>;
+  if (captures.length === 0) return <p>{error ?? "No recent captures."}</p>;
 
-                setError(
-                    err instanceof Error
-                        ? err.message
-                        : "Failed to fetch captures"
-                );
-            } finally {
-                if (!controller.signal.aborted) {
-                    setLoading(false);
-                }
-            }
-        }
-
-        loadRecentCaptures();
-
-        return () => controller.abort();
-    }, []);
-
-    if (loading) return <p>Loading recent captures...</p>;
-    if (error) return <p>Error: {error}</p>;
-    if (captures.length === 0) return <p>No recent captures.</p>;
-
-    return (
-        <div className="recent-captures">
-            <ul>
-                {captures.map((capture) => (
-                    <li key={capture.id}>
-                        {capture.content}
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
+  return (
+    <div className="capture-table recent-captures">
+      {error && <p role="alert" className="capture-list-error">{error}</p>}
+      <div className="capture-row capture-row-header">
+        <span>Capture</span>
+        <span>Tags</span>
+        <span>Created</span>
+        <span>Actions</span>
+      </div>
+      <ul>
+        {captures.map((capture) => (
+          <li className="capture-row" key={capture.id}>
+            <span className="capture-row-content">{capture.content}</span>
+            <span className="capture-row-tags">
+              {(capture.tags ?? []).length
+                ? capture.tags.map((tag) => (
+                    <span className="capture-tag" key={tag.id}>
+                      {tag.name}
+                    </span>
+                  ))
+                : <span className="capture-no-tags">—</span>}
+            </span>
+            <time dateTime={capture.createdAt}>
+              {formatRelativeTime(capture.createdAt)}
+            </time>
+            <button
+              type="button"
+              className="capture-remove-button"
+              aria-label={`Remove capture: ${capture.content}`}
+              disabled={removingId === capture.id}
+              onClick={() => handleRemove(capture.id)}
+            >
+              {removingId === capture.id ? "Removing..." : "Remove"}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
