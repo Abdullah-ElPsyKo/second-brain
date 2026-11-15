@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { TagPicker } from "./TagPicker";
 
 type CaptureType = "note" | "task" | "idea" | "link";
 
@@ -12,6 +13,7 @@ const captureTypes: { value: CaptureType; label: string }[] = [
 export function CaptureForm() {
   const [content, setContent] = useState("");
   const [type, setType] = useState<CaptureType>("note");
+  const [tags, setTags] = useState<string[]>([]);
 
   async function handleCapture() {
     const response = await fetch("http://localhost:3000/api/captures", {
@@ -19,7 +21,7 @@ export function CaptureForm() {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ content, type })
+      body: JSON.stringify({ content, type, tags })
     });
 
     if (!response.ok) {
@@ -29,6 +31,7 @@ export function CaptureForm() {
     }
 
     setContent("");
+    setTags([]);
   }
 
   return (
@@ -45,6 +48,8 @@ export function CaptureForm() {
           </button>
         ))}
       </div>
+
+      <TagPicker selectedTags={tags} onChange={setTags} />
 
       <textarea
         placeholder="What's on your mind?"

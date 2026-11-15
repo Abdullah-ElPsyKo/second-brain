@@ -35,3 +35,99 @@
   padding: 10px 24px;
   cursor: pointer;
 }
+
+.tag-picker {
+  position: relative;
+}
+
+.tag-selected {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  min-height: 36px;
+  padding: 6px;
+  border-radius: 8px;
+}
+
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background-color: #dbeafe;
+  color: #1e40af;
+  font-size: 14px;
+}
+
+.tag-chip button {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  color: inherit;
+}
+
+.tag-add-button {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.tag-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  z-index: 10;
+}
+
+.tag-dropdown input {
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  border-bottom: 1px solid #e5e7eb;
+  outline: none;
+}
+
+.tag-dropdown ul {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.tag-dropdown li button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.tag-dropdown li button:hover,
+.tag-dropdown li .create-option:hover {
+  background-color: #f3f4f6;
+}
+
+.tag-dropdown li button.active {
+  font-weight: bold;
+  color: #2563eb;
+}
+
+.tag-dropdown li .empty {
+  padding: 8px 12px;
+  color: #9ca3af;
+}

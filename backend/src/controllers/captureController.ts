@@ -11,6 +11,15 @@ const VALID_TYPES = Object.values(CaptureType);
 export async function createCaptureController(req: Request, res: Response) {
   const { content } = req.body;
   const rawType = typeof req.body.type === "string" ? req.body.type.toUpperCase() : undefined;
+  const rawTags: unknown[] = Array.isArray(req.body.tags) ? req.body.tags : [];
+  const tags = [
+    ...new Set(
+      rawTags
+        .filter((t): t is string => typeof t === "string")
+        .map((t) => t.trim())
+        .filter(Boolean),
+    ),
+  ];
 
   if (typeof content !== "string" || !content.trim()) {
     res.status(400).json({
@@ -27,7 +36,11 @@ export async function createCaptureController(req: Request, res: Response) {
   }
 
   try {
-    const capture = await createCapture(content.trim(), rawType as CaptureType);
+    const capture = await createCapture(
+      content.trim(),
+      rawType as CaptureType,
+      tags,
+    );
     res.status(201).json(capture);
   } catch (error) {
     res.status(500).json({
