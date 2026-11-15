@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import { CaptureType } from "@prisma/client";
 import {
   createCapture,
+  deleteCapture,
   getAllCaptures,
   getRecentCaptures,
 } from "../services/captureService.js";
@@ -49,6 +50,18 @@ export async function createCaptureController(req: Request, res: Response) {
   }
 }
 
+
+export async function deleteCaptureController(req: Request<{ id: string }>, res: Response) {
+  try {
+    const capture = await deleteCapture(req.params.id);
+    res.status(200).json(capture);
+  } catch (error) {
+    console.error(error);
+    res.status(404).json({ error: "Capture not found"});
+  }
+}
+
+
 export async function getRecentCapturesController(req: Request, res: Response) {
   try {
     const captures = await getRecentCaptures();
@@ -60,6 +73,7 @@ export async function getRecentCapturesController(req: Request, res: Response) {
     });
   }
 }
+
 
 export async function getAllCapturesController(req: Request, res: Response) {
   try {

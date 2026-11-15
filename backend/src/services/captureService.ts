@@ -39,3 +39,9 @@ export async function getAllCaptures() {
     include: { tags: true },
   });
 }
+
+export async function deleteCapture(id: string) {
+  return prisma.capture.delete({
+    where: { id },
+  });
+}
