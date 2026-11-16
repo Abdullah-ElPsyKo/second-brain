@@ -251,6 +251,73 @@
   color: #b91c1c;
 }
 
+.inbox-capture-row {
+  grid-template-columns: minmax(0, 1fr) minmax(120px, 0.6fr) minmax(110px, auto) auto;
+}
+
+.capture-assign-button {
+  padding: 6px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+}
+
+.capture-assignment-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(17, 24, 39, 0.45);
+}
+
+.capture-assignment-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: min(100%, 520px);
+  max-height: min(90vh, 720px);
+  overflow-y: auto;
+  padding: 24px;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+}
+
+.capture-assignment-editor h3 {
+  margin: 0;
+}
+
+.capture-assignment-editor label {
+  display: grid;
+  gap: 6px;
+}
+
+.capture-assignment-editor label input {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+}
+
+.assignment-field-label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.capture-assignment-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.capture-assignment-actions button {
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
 @media (max-width: 640px) {
   .capture-actions {
     flex-wrap: wrap;

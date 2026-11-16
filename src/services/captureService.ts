@@ -1,4 +1,31 @@
+import type { Capture } from "../types/capture";
+
 const API_URL = "http://localhost:3000/api/captures";
+
+export async function getInboxCaptures(signal?: AbortSignal): Promise<Capture[]> {
+  const response = await fetch(`${API_URL}/inbox`, { signal });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.json() as Promise<Capture[]>;
+}
+
+export type AssignCaptureInput = {
+  title: string;
+  tags: string[];
+} & ({ domainId: string; newDomainName?: never } | { domainId?: never; newDomainName: string });
+
+export async function assignCapture(
+  id: string,
+  input: AssignCaptureInput,
+): Promise<Capture> {
+  const response = await fetch(`${API_URL}/${encodeURIComponent(id)}/assign`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.json() as Promise<Capture>;
+}
 
 export async function removeCapture(id: string): Promise<void> {
   const response = await fetch(`${API_URL}/${encodeURIComponent(id)}`, {

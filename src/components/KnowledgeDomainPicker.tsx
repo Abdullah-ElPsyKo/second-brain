@@ -46,12 +46,6 @@ export function KnowledgeDomainPicker({
         setDomains(fetchedDomains);
         setLoadError("");
 
-        const inbox = fetchedDomains.find(
-          (domain) => domain.name.toLowerCase() === "inbox",
-        );
-        if (inbox && !selectedDomain) {
-          onChange({ kind: "existing", id: inbox.id, name: inbox.name });
-        }
       })
       .catch((error) => {
         if (!cancelled) {
@@ -63,7 +57,7 @@ export function KnowledgeDomainPicker({
     return () => {
       cancelled = true;
     };
-  }, [onChange]);
+  }, []);
 
   useEffect(() => {
     if (
@@ -119,7 +113,7 @@ export function KnowledgeDomainPicker({
       >
         <span className="domain-picker-icon" aria-hidden="true">▱</span>
         <span className="domain-picker-label">
-          {selectedDomain?.name ?? "Inbox"}
+          {selectedDomain?.name ?? "Choose domain"}
         </span>
         <span className="domain-picker-chevron" aria-hidden="true">⌄</span>
       </button>

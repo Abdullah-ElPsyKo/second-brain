@@ -5,7 +5,7 @@ export function Sidebar () {
     <aside style={{width: '200px', background:'#f0f0f0', padding:'1rem'}}>
       <nav>
         <ul style={{listStyle:'none',padding:0}}>
-          <li><a href="#">Inbox</a></li>
+          <li><NavLink to="/inbox">Inbox</NavLink></li>
           <li><NavLink to="/">Brain</NavLink></li>
           <li><NavLink to="/capture">Capture</NavLink></li>
           <li><a href="#">Todo List</a></li>

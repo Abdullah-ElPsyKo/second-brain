@@ -15,6 +15,11 @@ export interface Tag {
     name: string;
 }
 
+export interface Domain {
+    id: string;
+    name: string;
+}
+
 export interface Capture {
     id: string;
     title: string | null;
@@ -22,6 +27,7 @@ export interface Capture {
     type: CaptureType;
     status: CaptureStatus;
     tags: Tag[];
+    domain: Domain | null;
     createdAt: string;
     updatedAt: string;
 }
