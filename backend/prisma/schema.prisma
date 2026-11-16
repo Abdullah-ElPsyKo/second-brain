@@ -30,6 +30,8 @@ model Capture {
   type      CaptureType   @default(NOTE)
   status    CaptureStatus @default(INBOX)
   tags      Tag[]
+  domainId  String?
+  domain    Domain? @relation(fields: [domainId], references: [id])
 
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
@@ -37,7 +39,13 @@ model Capture {
 
 
 model Tag {
-  id        String   @id @default(uuid())
-  name      String   @unique
+  id        String    @id @default(uuid())
+  name      String    @unique
+  captures  Capture[]
+}
+
+model Domain {
+  id        String    @id @default(uuid())
+  name      String    @unique
   captures  Capture[]
 }

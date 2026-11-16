@@ -12,6 +12,12 @@ const VALID_TYPES = Object.values(CaptureType);
 export async function createCaptureController(req: Request, res: Response) {
   const { content } = req.body;
   const rawType = typeof req.body.type === "string" ? req.body.type.toUpperCase() : undefined;
+  const rawDomainId =
+    typeof req.body.domainId === "string" ? req.body.domainId.trim() : undefined;
+  const rawNewDomainName =
+    typeof req.body.newDomainName === "string"
+      ? req.body.newDomainName.trim()
+      : undefined;
   const rawTags: unknown[] = Array.isArray(req.body.tags) ? req.body.tags : [];
   const tags = [
     ...new Set(
@@ -36,11 +42,22 @@ export async function createCaptureController(req: Request, res: Response) {
     return;
   }
 
+  if (rawDomainId && rawNewDomainName) {
+    res.status(400).json({
+      error: "Choose an existing domain or create a new one, not both",
+    });
+    return;
+  }
+
   try {
     const capture = await createCapture(
       content.trim(),
       rawType as CaptureType,
       tags,
+      {
+        domainId: rawDomainId || undefined,
+        newDomainName: rawNewDomainName || undefined,
+      },
     );
     res.status(201).json(capture);
   } catch (error) {
