@@ -36,6 +36,65 @@
   cursor: pointer;
 }
 
+.capture-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.capture-actions > .tag-picker {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.capture-actions > .domain-picker {
+  flex: 0 0 auto;
+}
+
+.domain-picker {
+  position: relative;
+}
+
+.domain-picker-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 112px;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+}
+
+.domain-picker-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.domain-picker-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.domain-picker-chevron {
+  color: #6b7280;
+}
+
+.domain-picker .tag-dropdown {
+  min-width: 220px;
+}
+
+.capture-submit {
+  flex: 0 0 auto;
+  padding: 10px 24px;
+  cursor: pointer;
+}
+
 .tag-picker {
   position: relative;
 }
@@ -193,6 +252,14 @@
 }
 
 @media (max-width: 640px) {
+  .capture-actions {
+    flex-wrap: wrap;
+  }
+
+  .capture-actions > .tag-picker {
+    flex: 1 1 100%;
+  }
+
   .capture-row {
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 8px 12px;
